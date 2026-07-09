@@ -12,6 +12,13 @@
     <meta content="Performance Marketing Academy by Mahmoud Khaled" name="description"/>
     <meta content="Meta Ads, Media Buying, Google Ads, Performance Marketing" name="keywords"/>
     <meta content="Mahmoud Khaled" name="author"/>
+    <link href="assets/images/logo.png" rel="icon" type="image/png"/>
+
+    <!-- Open Graph / Social Sharing -->
+    <meta content="Mahmoud Khaled Academy" property="og:title"/>
+    <meta content="Performance Marketing Academy by Mahmoud Khaled" property="og:description"/>
+    <meta content="assets/images/profile.png" property="og:image"/>
+    <meta content="website" property="og:type"/>
 </head>
 <body>
 
@@ -451,12 +458,15 @@
                 </ul>
             </div>
             <div class="consultation-form">
-                <form>
-                    <input placeholder="Your Name" required="" type="text"/>
-                    <input placeholder="Email Address" required="" type="email"/>
-                    <input placeholder="Business / Brand" type="text"/>
-                    <textarea placeholder="Tell me about your business..." rows="5"></textarea>
-                    <button type="submit">Book Consultation</button>
+                <form id="consultationForm">
+                    <input name="name" placeholder="Your Name" required="" type="text"/>
+                    <input name="email" placeholder="Email Address" required="" type="email"/>
+                    <input name="business" placeholder="Business / Brand" type="text"/>
+                    <textarea name="message" placeholder="Tell me about your business..." required="" rows="5"></textarea>
+                    <button id="consultationSubmitBtn" type="submit">
+                        <span class="btn-text">Book Consultation</span>
+                    </button>
+                    <p class="form-status" id="consultationStatus"></p>
                 </form>
             </div>
         </div>
@@ -472,27 +482,27 @@
             </div>
             <div class="contact-grid">
                 <div class="contact-info">
-                    <div class="contact-card">
+                    <a class="contact-card" href="mailto:mahmoudkhaledsayed92@gmail.com">
                         <div class="icon">📧</div>
                         <div>
                             <h4>Email</h4>
-                            <p>mahmoud@example.com</p>
+                            <p>mahmoudkhaledsayed92@gmail.com</p>
                         </div>
-                    </div>
-                    <div class="contact-card">
+                    </a>
+                    <a class="contact-card" href="tel:+201559672552">
                         <div class="icon">📱</div>
                         <div>
                             <h4>Phone</h4>
-                            <p>+20 XXX XXX XXXX</p>
+                            <p>+20 155 967 2552</p>
                         </div>
-                    </div>
-                    <div class="contact-card">
+                    </a>
+                    <a class="contact-card" href="https://wa.me/201559672552?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%85%D8%AD%D9%85%D9%88%D8%AF%D8%8C%20%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%A3%D9%83%D8%AA%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D9%83%D9%88%D8%B1%D8%B3%D8%A7%D8%AA" target="_blank" rel="noopener">
                         <div class="icon">💬</div>
                         <div>
                             <h4>WhatsApp</h4>
                             <p>Available for quick inquiries</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="contact-social">
                     <h3>Follow Me</h3>
@@ -539,10 +549,11 @@
                 <div class="footer-column">
                     <h4>Newsletter</h4>
                     <p>Subscribe to receive free marketing tips and exclusive resources.</p>
-                    <form action="" class="newsletter-form" method="POST">
-                        <input placeholder="Your Email" type="email"/>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input name="email" placeholder="Your Email" required="" type="email"/>
                         <button type="submit">Subscribe</button>
                     </form>
+                    <p class="form-status" id="newsletterStatus"></p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -554,6 +565,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- ================= Floating WhatsApp Button ================= -->
+    <a aria-label="Chat on WhatsApp" class="whatsapp-float" href="https://wa.me/201559672552?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%85%D8%AD%D9%85%D9%88%D8%AF%D8%8C%20%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%A3%D9%83%D8%AA%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D9%83%D9%88%D8%B1%D8%B3%D8%A7%D8%AA" rel="noopener" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <script src="assets/js/main.js"></script>
 </body>

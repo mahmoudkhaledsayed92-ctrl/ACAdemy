@@ -195,23 +195,148 @@ document.addEventListener('DOMContentLoaded', () => {
     revealOnScroll(); // تشغيلها مرة فورية عند تحميل الصفحة
 
 
-    // ==================== 10. FORM VALIDATION ====================
-    const consultationForm = document.querySelector('.consultation-form form');
+    // ==================== 10. CONSULTATION FORM: WHATSAPP + EMAIL ====================
+    // بيانات التواصل بتاعة محمود خالد - غيّرها من هنا لو حبيت تحدثها لاحقاً
+    const WHATSAPP_NUMBER = '201559672552';       // رقم الواتساب بالكود الدولي من غير + أو صفر
+    const OWNER_EMAIL = 'mahmoudkhaledsayed92@gmail.com'; // الإيميل اللي هيوصله الحجز
+
+    const consultationForm = document.getElementById('consultationForm');
+    const consultationStatus = document.getElementById('consultationStatus');
+    const consultationBtn = document.getElementById('consultationSubmitBtn');
+
     if (consultationForm) {
-        consultationForm.addEventListener('submit', function(e) {
+        consultationForm.addEventListener('submit', async function (e) {
             e.preventDefault(); // منع الصفحة من إعادة التحميل الافتراضية
-            
-            const name = this.querySelector('input[type="text"]').value.trim();
-            const email = this.querySelector('input[type="email"]').value.trim();
-            
-            if (name === "" || email === "") {
-                alert("برجاء ملء الحقول الأساسية الاسم والبريد الإلكتروني.");
+
+            const nameField = this.querySelector('input[name="name"]');
+            const emailField = this.querySelector('input[name="email"]');
+            const businessField = this.querySelector('input[name="business"]');
+            const messageField = this.querySelector('textarea[name="message"]');
+
+            const name = nameField.value.trim();
+            const email = emailField.value.trim();
+            const business = businessField.value.trim();
+            const message = messageField.value.trim();
+
+            // تحقق بسيط من البيانات الأساسية
+            if (name === '' || email === '') {
+                showStatus(consultationStatus, 'برجاء ملء الاسم والبريد الإلكتروني.', 'error');
                 return;
             }
-            
-            // محاكاة إرسال ناجح (تستبدلها بـ API الإرسال لاحقاً)
-            alert(`شكراً لك يا ${name}! تم استلام طلبك للحصول على الاستشارة بنجاح، وسأتواصل معك قريباً.`);
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showStatus(consultationStatus, 'برجاء إدخال بريد إلكتروني صحيح.', 'error');
+                return;
+            }
+
+            // حالة تحميل على الزرار عشان العميل يعرف إن في طلب بيتنفذ
+            setButtonLoading(consultationBtn, true, 'جاري الإرسال...');
+            showStatus(consultationStatus, '', '');
+
+            // 1) إرسال البيانات كإيميل تلقائي عن طريق FormSubmit (خدمة مجانية بدون سيرفر)
+            let emailSent = false;
+            try {
+                const response = await fetch(`https://formsubmit.co/ajax/${OWNER_EMAIL}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        business: business || 'غير محدد',
+                        message: message || 'لا توجد تفاصيل إضافية',
+                        _subject: `طلب استشارة جديد من ${name} - Mahmoud Khaled Academy`
+                    })
+                });
+                emailSent = response.ok;
+            } catch (err) {
+                emailSent = false;
+            }
+
+            // 2) فتح واتساب في تاب جديد برسالة جاهزة بنفس بيانات النموذج
+            const waText = encodeURIComponent(
+                `مرحبا محمود، معايا طلب حجز استشارة جديد:\n` +
+                `الاسم: ${name}\n` +
+                `الإيميل: ${email}\n` +
+                `النشاط/البراند: ${business || 'غير محدد'}\n` +
+                `التفاصيل: ${message || 'لا توجد تفاصيل إضافية'}`
+            );
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`, '_blank');
+
+            setButtonLoading(consultationBtn, false, 'Book Consultation');
+
+            if (emailSent) {
+                showStatus(consultationStatus, `شكراً لك يا ${name}! تم إرسال طلبك بالإيميل، وفتحنا لك واتساب كمان لتأكيد سريع.`, 'success');
+            } else {
+                showStatus(consultationStatus, `تم فتح واتساب لإرسال طلبك. ملحوظة: الإرسال بالإيميل لم يكتمل، برجاء التأكيد عبر واتساب.`, 'warning');
+            }
+
             this.reset();
         });
+    }
+
+
+    // ==================== 11. NEWSLETTER FORM (FOOTER) ====================
+    const newsletterForm = document.getElementById('newsletterForm');
+    const newsletterStatus = document.getElementById('newsletterStatus');
+
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const emailField = this.querySelector('input[name="email"]');
+            const email = emailField.value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email)) {
+                showStatus(newsletterStatus, 'برجاء إدخال بريد إلكتروني صحيح.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://formsubmit.co/ajax/${OWNER_EMAIL}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        _subject: 'مشترك جديد في النشرة البريدية - Mahmoud Khaled Academy'
+                    })
+                });
+
+                if (response.ok) {
+                    showStatus(newsletterStatus, 'تم الاشتراك بنجاح، شكراً لك!', 'success');
+                    this.reset();
+                } else {
+                    showStatus(newsletterStatus, 'حدث خطأ، برجاء المحاولة لاحقاً.', 'error');
+                }
+            } catch (err) {
+                showStatus(newsletterStatus, 'حدث خطأ في الاتصال، برجاء المحاولة لاحقاً.', 'error');
+            }
+        });
+    }
+
+
+    // ==================== 12. HELPER FUNCTIONS ====================
+    function showStatus(el, text, type) {
+        if (!el) return;
+        el.textContent = text;
+        el.className = 'form-status' + (type ? ` ${type}` : '');
+    }
+
+    function setButtonLoading(btn, isLoading, text) {
+        if (!btn) return;
+        const span = btn.querySelector('.btn-text');
+        btn.disabled = isLoading;
+        btn.classList.toggle('loading', isLoading);
+        if (span) {
+            span.textContent = text;
+        } else {
+            btn.textContent = text;
+        }
     }
 });

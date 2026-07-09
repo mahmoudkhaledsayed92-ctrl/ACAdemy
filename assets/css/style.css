@@ -1765,3 +1765,72 @@ visibility:hidden;
         left: 0;
     }
 }
+/* ================= Floating WhatsApp Button ================= */
+.whatsapp-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 30px;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, .45);
+    z-index: 999;
+    transition: transform .3s ease, box-shadow .3s ease;
+    animation: whatsapp-pulse 2.2s infinite;
+}
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 28px rgba(37, 211, 102, .6);
+}
+@keyframes whatsapp-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, .55); }
+    70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 52px;
+        height: 52px;
+        font-size: 26px;
+    }
+}
+
+/* ================= Contact card as link ================= */
+.contact-card {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* ================= Form Status Messages ================= */
+.form-status {
+    min-height: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 4px;
+}
+.form-status.success {
+    color: #6FCF97;
+}
+.form-status.error {
+    color: #EB5757;
+}
+.form-status.warning {
+    color: #F2C94C;
+}
+
+/* ================= Submit Button Loading State ================= */
+.consultation-form button[disabled],
+.newsletter-form button[disabled] {
+    opacity: .7;
+    cursor: not-allowed;
+    transform: none !important;
+}
